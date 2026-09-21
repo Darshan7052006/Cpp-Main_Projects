@@ -90,7 +90,6 @@ public:
         this->accountstatus = status;
     }
 
-
     virtual void displayInfo() const {
     cout << "User ID: " << Userid << endl;
     cout << "Name: " << name << endl;
