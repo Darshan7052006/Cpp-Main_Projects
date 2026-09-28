@@ -7,42 +7,49 @@
 
 using namespace std;
 
-enum class Role {
+enum class Role
+{
     Student,
     Teacher,
     Manager
 };
 
-enum class AccountStatus {
+enum class AccountStatus
+{
     Active,
     Suspended
 };
 
-enum class bookstatus{
+enum class bookstatus
+{
     Available,
     Issued
 };
 
-enum class LoanStatus{
+enum class LoanStatus
+{
     Active,
     Returned
 };
 
-void showwelcomemenu(){
+void showwelcomemenu()
+{
     cout << "\n----------WELCOME TO SLIRMS----------\n";
     cout << "1)Login\n";
     cout << "2)Register\n";
     cout << "3)Exit\n";
 }
 
-void registrationmenu(){
+void registrationmenu()
+{
     cout << "\n----------REGISTRATION MENU----------\n";
     cout << "1)Student Registration\n";
     cout << "2)Teaher Registration\n";
     cout << "3)Back\n";
 }
 
-void StudentMenu(){
+void StudentMenu()
+{
     cout << "\n----------STUDENT MENU----------\n";
     cout << "1)Browse Books\n";
     cout << "2)Search Books\n";
@@ -55,7 +62,8 @@ void StudentMenu(){
     cout << "9)Logout";
 }
 
-void TeacherMenu(){
+void TeacherMenu()
+{
     cout << "\n----------Teacher MENU----------\n";
     cout << "1)Browse Books\n";
     cout << "2)Search Books\n";
@@ -68,7 +76,8 @@ void TeacherMenu(){
     cout << "9)Logout";
 }
 
-void ManagerMenu(){
+void ManagerMenu()
+{
     cout << "\n----------WELCOME MISTER MANAGER----------\n";
     cout << "1)User Management\n";
     cout << "2)Book Management\n";
@@ -81,7 +90,8 @@ void ManagerMenu(){
     cout << "9)Logout\n";
 }
 
-void Usermanagement(){
+void Usermanagement()
+{
     cout << "\n-----------WELCOME TO USER MANAGEMENT SECTION----------\n";
     cout << "1)View All Users\n";
     cout << "2)Find User\n";
@@ -94,7 +104,8 @@ void Usermanagement(){
     cout << "9)User Activity\n";
 }
 
-void Bookmanagement(){
+void Bookmanagement()
+{
     cout << "\n----------WELCOME TO BOOK MANAGEMENT SECTION----------\n";
     cout << "1)Add Book\n";
     cout << "2)Find Book\n";
@@ -106,7 +117,8 @@ void Bookmanagement(){
     cout << "8)Available Books\n";
 }
 
-void LoanManagement(){
+void LoanManagement()
+{
     cout << "\n----------WELCOME TO LOAN MANAGEMENT SECTION----------\n";
     cout << "1)All Loans\n";
     cout << "2)Active Loans\n";
@@ -114,10 +126,10 @@ void LoanManagement(){
     cout << "4)Overdue Loans\n";
     cout << "5)Find Loan\n";
     cout << "6)User Loans\n";
-
 }
 
-class User {
+class User
+{
 private:
     string Userid;
     string name;
@@ -125,7 +137,7 @@ private:
     string password;
     Role role;
     AccountStatus accountstatus;
-    
+
 public:
     virtual ~User() = default;
 
@@ -134,7 +146,8 @@ public:
          string email = "",
          string password = "",
          Role role = Role::Student,
-         AccountStatus accountStatus = AccountStatus::Active) {
+         AccountStatus accountStatus = AccountStatus::Active)
+    {
 
         this->Userid = userid;
         this->name = name;
@@ -144,141 +157,203 @@ public:
         this->accountstatus = accountStatus;
     }
 
-    string getUserId() const {
+    string getUserId() const
+    {
         return Userid;
     }
 
-    string getName() const {
+    string getName() const
+    {
         return name;
     }
 
-    string getEmail() const {
+    string getEmail() const
+    {
         return email;
     }
 
-    Role getRole() const {
+    Role getRole() const
+    {
         return role;
     }
 
-    AccountStatus getAccountstatus() const {
+    AccountStatus getAccountstatus() const
+    {
         return accountstatus;
     }
 
-    void setName(string name) {
+    void setName(string name)
+    {
         this->name = name;
     }
 
-    void setEmail(string email) {
+    void setEmail(string email)
+    {
         this->email = email;
     }
 
-    void changePassword(string Password) {
+    void changePassword(string Password)
+    {
         this->password = Password;
     }
 
-    void changeAccountStatus(AccountStatus status) {
+    void changeAccountStatus(AccountStatus status)
+    {
         this->accountstatus = status;
     }
 
-    virtual void displayInfo() const {
-    cout << "User ID: " << Userid << endl;
-    cout << "Name: " << name << endl;
-    cout << "Email: " << email << endl;
-}
+    virtual void displayInfo() const
+    {
+        cout << "User ID: " << Userid << endl;
+        cout << "Name: " << name << endl;
+        cout << "Email: " << email << endl;
+        string roleText;
+        switch (role){
+            case Role::Student:
+            roleText = "Student";
+            break;
+            
+            case Role::Teacher:
+            roleText = "Teacher";
+            break;
+
+            case Role::Manager:
+            roleText = "Manager";
+            break;
+
+            default:
+            roleText = "Undefined Role";
+            break;
+        }
+
+        string Accounttext;
+        switch (accountstatus){
+            case AccountStatus::Active:
+            Accounttext = "Active";
+            break;
+
+            case AccountStatus::Suspended:
+            Accounttext = "Suspended";
+            break;
+
+            default:
+            Accounttext = "Unknown Status";
+            break; 
+
+        }
+
+        cout << "Role : " << roleText << endl;
+        cout << "Account Status : " << Accounttext << endl;
+    }
 };
 
-class Student : public User{
+class Student : public User
+{
 private:
     string registrationNumber;
     string department;
     int semester;
+
 public:
     Student(string registrationnumber = "",
-        string department = "",
-        int semester = 0,
-        string userid = "",
-        string email = "",
-        string name = "",
-        string password = "")
-    : User(userid, name, email, password,
-           Role::Student, AccountStatus::Active)
-{
-    this->registrationNumber = registrationnumber;
-    this->department = department;
-    this->semester = semester;
-}
-
-    string getregnum() const {
-        return registrationNumber;
-    }
-
-    string getdepartment() const {
-        return department;
-    }
-    
-    int getsemester() const {
-        return semester;
-    }
-
-    void setDepartment(string department){
+            string department = "",
+            int semester = 0,
+            string userid = "",
+            string email = "",
+            string name = "",
+            string password = "")
+        : User(userid, name, email, password,
+               Role::Student, AccountStatus::Active)
+    {
+        this->registrationNumber = registrationnumber;
         this->department = department;
-    }
-
-    void setsemester(int semester){
         this->semester = semester;
     }
 
-    void displayInfo() const override {
-    cout << "User ID: " << getUserId() << endl;
-    cout << "Name: " << getName() << endl;
-    cout << "Email: " << getEmail() << endl;
-    cout << "Registration Number: " << registrationNumber << endl;
-    cout << "Department: " << department << endl;
-    cout << "Semester: " << semester << endl;
-}
+    string getregnum() const
+    {
+        return registrationNumber;
+    }
 
+    string getdepartment() const
+    {
+        return department;
+    }
+
+    int getsemester() const
+    {
+        return semester;
+    }
+
+    void setDepartment(string department)
+    {
+        this->department = department;
+    }
+
+    void setsemester(int semester)
+    {
+        this->semester = semester;
+    }
+
+    void displayInfo() const override
+    {
+        cout << "User ID: " << getUserId() << endl;
+        cout << "Name: " << getName() << endl;
+        cout << "Email: " << getEmail() << endl;
+        cout << "Registration Number: " << registrationNumber << endl;
+        cout << "Department: " << department << endl;
+        cout << "Semester: " << semester << endl;
+    }
 };
 
-class Teacher : public User{
+class Teacher : public User
+{
 private:
     string facultyId;
     string department;
     string designation;
+
 public:
     Teacher(string userid = "",
-        string name = "",
-        string email = "",
-        string password = "",
-        string facultyid = "",
-        string department = "",
-        string designation = "") : User(userid,name,email,password,Role::Teacher, AccountStatus::Active)
-        {
-            this->facultyId = facultyid;
-            this->department = department;
-            this->designation = designation;
-        }
-    
-    string getDepartment() const{
-        return department;
-    }
-
-    string getdesignation() const{
-        return designation;
-    }
-
-    string getfacultyid() const{
-        return facultyId;
-    }
-
-    void setdepartment(string department){
+            string name = "",
+            string email = "",
+            string password = "",
+            string facultyid = "",
+            string department = "",
+            string designation = "") : User(userid, name, email, password, Role::Teacher, AccountStatus::Active)
+    {
+        this->facultyId = facultyid;
         this->department = department;
-    }
-
-    void setdesignation(string designation){
         this->designation = designation;
     }
 
-    void displayInfo() const override {
+    string getDepartment() const
+    {
+        return department;
+    }
+
+    string getdesignation() const
+    {
+        return designation;
+    }
+
+    string getfacultyid() const
+    {
+        return facultyId;
+    }
+
+    void setdepartment(string department)
+    {
+        this->department = department;
+    }
+
+    void setdesignation(string designation)
+    {
+        this->designation = designation;
+    }
+
+    void displayInfo() const override
+    {
         cout << "User ID: " << getUserId() << endl;
         cout << "Name: " << getName() << endl;
         cout << "Email: " << getEmail() << endl;
@@ -286,23 +361,23 @@ public:
         cout << "Department: " << department << endl;
         cout << "Designation: " << designation << endl;
     }
-
 };
 
-class Manager : public User{
+class Manager : public User
+{
 public:
     Manager(string userid = "",
-        string name = "",
-        string email = "",
-        string password = "")
-    : User(userid, name, email, password,
-           Role::Manager, AccountStatus::Active)
-{
-}
-
+            string name = "",
+            string email = "",
+            string password = "")
+        : User(userid, name, email, password,
+               Role::Manager, AccountStatus::Active)
+    {
+    }
 };
 
-class Book{
+class Book
+{
 private:
     string bookID;
     string ISBN;
@@ -314,58 +389,67 @@ private:
 
 public:
     Book(string bookid = "",
-        string ISBN =  "",
-        string title =  "",
-        string author =  "",
-        string category = "",
-        int publicationyear = 0,
-        bookstatus status = bookstatus::Available)
-        {
+         string ISBN = "",
+         string title = "",
+         string author = "",
+         string category = "",
+         int publicationyear = 0,
+         bookstatus status = bookstatus::Available)
+    {
 
-            this->bookID = bookid;
-            this->ISBN = ISBN;
-            this->title = title;
-            this->author = author;
-            this->category = category;
-            this->publicationyear = publicationyear;
-            this->status = status;
+        this->bookID = bookid;
+        this->ISBN = ISBN;
+        this->title = title;
+        this->author = author;
+        this->category = category;
+        this->publicationyear = publicationyear;
+        this->status = status;
+    }
 
-        }
-
-    string getBookID() const {
+    string getBookID() const
+    {
         return bookID;
     }
 
-    string getISBN() const {
+    string getISBN() const
+    {
         return ISBN;
     }
 
-    string getTitle() const {
+    string getTitle() const
+    {
         return title;
     }
 
-    string getauthor() const {
+    string getauthor() const
+    {
         return author;
     }
 
-    string getcategory() const {
+    string getcategory() const
+    {
         return category;
     }
 
-    int getpublicationyear() const {
+    int getpublicationyear() const
+    {
         return publicationyear;
     }
 
-    bookstatus getbook() const {
+    bookstatus getbook() const
+    {
         return status;
     }
 
-    void setcategory(string category){
-        this -> category = category;
+    void setcategory(string category)
+    {
+        this->category = category;
     }
 
-    bool issueBook(){
-        if(status == bookstatus::Issued){
+    bool issueBook()
+    {
+        if (status == bookstatus::Issued)
+        {
             return false;
         }
 
@@ -373,8 +457,10 @@ public:
         return true;
     }
 
-    bool returnBook(){
-        if(status == bookstatus::Available){
+    bool returnBook()
+    {
+        if (status == bookstatus::Available)
+        {
             return false;
         }
 
@@ -383,7 +469,8 @@ public:
     }
 };
 
-class Loan{
+class Loan
+{
 private:
     string LoanID;
     string userID;
@@ -425,37 +512,45 @@ public:
     {
     }
 
-
-    string getLoanID() const{
+    string getLoanID() const
+    {
         return LoanID;
     }
 
-    string getuserid() const{
+    string getuserid() const
+    {
         return userID;
     }
 
-    string getBookid() const{
+    string getBookid() const
+    {
         return bookID;
     }
 
-    time_t getIssueDate() const{
+    time_t getIssueDate() const
+    {
         return issuedate;
     }
 
-    time_t getduedate() const{
+    time_t getduedate() const
+    {
         return duedate;
     }
 
-    time_t getreturndate() const{
+    time_t getreturndate() const
+    {
         return returndate;
     }
 
-    LoanStatus getstatus() const{
+    LoanStatus getstatus() const
+    {
         return status;
     }
 
-    bool returnLoan(){
-        if(status == LoanStatus::Active){
+    bool returnLoan()
+    {
+        if (status == LoanStatus::Active)
+        {
             returndate = time(nullptr);
             status = LoanStatus::Returned;
             return true;
@@ -463,10 +558,13 @@ public:
         return false;
     }
 
-    bool isOverdue(){
-        if(status == LoanStatus::Active){
+    bool isOverdue()
+    {
+        if (status == LoanStatus::Active)
+        {
             time_t current_time = time(nullptr);
-            if(current_time > duedate){
+            if (current_time > duedate)
+            {
                 return true;
             }
 
@@ -477,73 +575,91 @@ public:
     }
 };
 
-class Library{
+class Library
+{
 private:
     vector<unique_ptr<User>> users;
     vector<Book> books;
     vector<Loan> loans;
 
 public:
-    void adduser(unique_ptr<User> user){
+    void adduser(unique_ptr<User> user)
+    {
         users.push_back(move(user));
     }
 
-    User* finduserById(const string& userID){
-        for(auto& user : users){
-            if(user->getUserId() == userID){
+    User *finduserById(const string &userID)
+    {
+        for (auto &user : users)
+        {
+            if (user->getUserId() == userID)
+            {
                 return user.get();
             }
         }
         return nullptr;
     }
 
-    void addbook(const Book& book){
+    void addbook(const Book &book)
+    {
         books.push_back(book);
     }
 
-    Book* findbookbyId(const string& bookid){
-        for(auto& book : books){
-            if(book.getBookID() == bookid){
+    Book *findbookbyId(const string &bookid)
+    {
+        for (auto &book : books)
+        {
+            if (book.getBookID() == bookid)
+            {
                 return &book;
             }
         }
         return nullptr;
     }
-    
-    vector<Book*> searchBytitle(const string& title){
-        vector<Book*> results; 
-        for(auto& Book : books){
-            if(Book.getTitle() == title){
-                results.push_back(&Book);
-            }
-        }
-        return results;
-    }
 
-    vector<Book*> searchByISBN(const string& ISBN){
-        vector<Book*> results; 
-        for(auto& Book : books){
-            if(Book.getISBN() == ISBN){
-                results.push_back(&Book);
-            }
-        }
-        return results;
-    }
-
-    bool issuebook(const string& userID,
-                   const string& bookID,
-                   const string& loanID)
+    vector<Book *> searchBytitle(const string &title)
     {
-        User* user = finduserById(userID);
-        if((user == nullptr) || (user->getAccountstatus() != AccountStatus::Active)){
+        vector<Book *> results;
+        for (auto &Book : books)
+        {
+            if (Book.getTitle() == title)
+            {
+                results.push_back(&Book);
+            }
+        }
+        return results;
+    }
+
+    vector<Book *> searchByISBN(const string &ISBN)
+    {
+        vector<Book *> results;
+        for (auto &Book : books)
+        {
+            if (Book.getISBN() == ISBN)
+            {
+                results.push_back(&Book);
+            }
+        }
+        return results;
+    }
+
+    bool issuebook(const string &userID,
+                   const string &bookID,
+                   const string &loanID)
+    {
+        User *user = finduserById(userID);
+        if ((user == nullptr) || (user->getAccountstatus() != AccountStatus::Active))
+        {
             return false;
         }
 
-        Book* book = findbookbyId(bookID);
-        if(book == nullptr){
+        Book *book = findbookbyId(bookID);
+        if (book == nullptr)
+        {
             return false;
         }
-        if(!book->issueBook()){
+        if (!book->issueBook())
+        {
             return false;
         }
 
@@ -554,49 +670,59 @@ public:
         return true;
     }
 
-    Loan* findactiveloan(
-    const string& userID,
-    const string& bookID){
+    Loan *findactiveloan(
+        const string &userID,
+        const string &bookID)
+    {
 
-        for(auto& loan:loans){
-            if(loan.getuserid() == userID && 
-               loan.getBookid() == bookID && 
-               loan.getstatus() == LoanStatus::Active){
+        for (auto &loan : loans)
+        {
+            if (loan.getuserid() == userID &&
+                loan.getBookid() == bookID &&
+                loan.getstatus() == LoanStatus::Active)
+            {
                 return &loan;
-               }
+            }
         }
         return nullptr;
     }
 
     bool returnBook(
-        const string& userID,
-        const string& bookID
-    ){
-        Loan* loan = findactiveloan(userID,bookID);
-        if(loan == nullptr){
+        const string &userID,
+        const string &bookID)
+    {
+        Loan *loan = findactiveloan(userID, bookID);
+        if (loan == nullptr)
+        {
             return false;
         }
-        Book* book = findbookbyId(bookID);
-        if(book == nullptr){
+        Book *book = findbookbyId(bookID);
+        if (book == nullptr)
+        {
             return false;
         }
-        if(!book->returnBook()){
+        if (!book->returnBook())
+        {
             return false;
         }
         loan->returnLoan();
         return true;
     }
 
-    void displaybooks() const{
-        for(const auto& book: books){
+    void displaybooks() const
+    {
+        for (const auto &book : books)
+        {
             cout << " Book ID : " << book.getBookID() << endl;
             cout << " Title : " << book.getTitle() << endl;
             cout << "ISBN : " << book.getISBN() << endl;
             cout << "Status : ";
-            if(book.getbook() == bookstatus ::Available){
+            if (book.getbook() == bookstatus::Available)
+            {
                 cout << "Available" << endl;
             }
-            else{
+            else
+            {
                 cout << "Issued" << endl;
             }
 
@@ -606,13 +732,17 @@ public:
     }
 };
 
-class Database{
+class Database
+{
 private:
-    sqlite3* db = nullptr;
+    sqlite3 *db = nullptr;
+
 public:
-    bool open(const string& filename){
+    bool open(const string &filename)
+    {
         int result = sqlite3_open(filename.c_str(), &db);
-        if(result != SQLITE_OK){
+        if (result != SQLITE_OK)
+        {
             cerr << "Could not open Database: " << sqlite3_errmsg(db) << endl;
             return false;
         }
@@ -620,14 +750,16 @@ public:
         return true;
     }
 
-    bool createTables(){
+    bool createTables()
+    {
 
-        if (db == nullptr) {
-        cerr << "Database is not open." << endl;
-        return false;
+        if (db == nullptr)
+        {
+            cerr << "Database is not open." << endl;
+            return false;
         }
 
-        const char* sql = R"(
+        const char *sql = R"(
         CREATE TABLE IF NOT EXISTS users(
             user_id TEXT PRIMARY KEY UNIQUE,
             name TEXT NOT NULL,
@@ -660,156 +792,249 @@ public:
             FOREIGN KEY(book_id) REFERENCES books(book_id)
         );
     )";
-    char *errormessage = nullptr;
-    int result = sqlite3_exec(
-        db,
-        sql,
-        nullptr,
-        nullptr,
-        &errormessage
-    );
+        char *errormessage = nullptr;
+        int result = sqlite3_exec(
+            db,
+            sql,
+            nullptr,
+            nullptr,
+            &errormessage);
 
-    if (result != SQLITE_OK){
-         cerr << "Could not create tables: "
-             << errormessage << endl;
+        if (result != SQLITE_OK)
+        {
+            cerr << "Could not create tables: "
+                 << errormessage << endl;
 
-        sqlite3_free(errormessage);
-        return false;
+            sqlite3_free(errormessage);
+            return false;
+        }
+
+        cout << "Tables are ready." << endl;
+        return true;
     }
-
-    cout << "Tables are ready." << endl;
-    return true;
-    }
-    ~Database(){
-        if(db!= nullptr){
+    ~Database()
+    {
+        if (db != nullptr)
+        {
             sqlite3_close(db);
         }
     }
 
-    bool enableForeignKeys(){
-    if(db == nullptr){
-    cerr << "Database is not open" << endl;
-    return false;
+    bool enableForeignKeys()
+    {
+        if (db == nullptr)
+        {
+            cerr << "Database is not open" << endl;
+            return false;
         }
-    const char* sql = "PRAGMA foreign_keys = ON;";
-    char* errormessage = nullptr;
-    int result = sqlite3_exec(db,
-                              sql,
-                              nullptr,
-                              nullptr,
-                              &errormessage);
+        const char *sql = "PRAGMA foreign_keys = ON;";
+        char *errormessage = nullptr;
+        int result = sqlite3_exec(db,
+                                  sql,
+                                  nullptr,
+                                  nullptr,
+                                  &errormessage);
 
-    if(result != SQLITE_OK){
-        cerr << "Could not enable foreign keys: " << (errormessage != nullptr ? errormessage
-                                                                            : sqlite3_errmsg(db)) 
-                                              << endl;
-        sqlite3_free(errormessage);
-        return false;
+        if (result != SQLITE_OK)
+        {
+            cerr << "Could not enable foreign keys: " << (errormessage != nullptr ? errormessage : sqlite3_errmsg(db))
+                 << endl;
+            sqlite3_free(errormessage);
+            return false;
         }
 
-    cout << "Foreign-key checking is enabled." << endl;
-    return true;
+        cout << "Foreign-key checking is enabled." << endl;
+        return true;
     }
 
-    bool insertbook(const Book& book){
-        if(db == nullptr){
+    bool insertbook(const Book &book)
+    {
+        if (db == nullptr)
+        {
             cerr << "Database is not open." << endl;
             return false;
         }
 
-        const char* sql = 
-              "INSERT INTO books "
-              "(book_id, isbn, title, author, category, publication_year, status) "
-              "VALUES (?, ?, ?, ?, ?, ?, ?);";
+        const char *sql =
+            "INSERT INTO books "
+            "(book_id, isbn, title, author, category, publication_year, status) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-        sqlite3_stmt* statement = nullptr;
+        sqlite3_stmt *statement = nullptr;
 
         int result = sqlite3_prepare_v2(
             db,
             sql,
             -1,
             &statement,
-            nullptr
-        );
+            nullptr);
 
-        if(result != SQLITE_OK){
+        if (result != SQLITE_OK)
+        {
             cerr << "Could not prepare book insert: "
                  << sqlite3_errmsg(db) << endl;
             return false;
         }
 
-        const char* statustext = 
-            (book.getbook() == bookstatus::Available)?"Available" : "Issued";
+        const char *statustext =
+            (book.getbook() == bookstatus::Available) ? "Available" : "Issued";
 
-        bool bindingsSucceded = 
-             sqlite3_bind_text(statement, 1, book.getBookID().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK 
-             &&
-              sqlite3_bind_text(statement, 2, book.getISBN().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK 
-              &&
-            sqlite3_bind_text(statement, 3, book.getTitle().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK 
-            &&
-            sqlite3_bind_text(statement, 4, book.getauthor().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK 
-            &&
-            sqlite3_bind_text(statement, 5, book.getcategory().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK 
-            &&
-            sqlite3_bind_int(statement, 6, book.getpublicationyear()) == SQLITE_OK 
-            &&
+        bool bindingsSucceeded =
+            sqlite3_bind_text(statement, 1, book.getBookID().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK &&
+            sqlite3_bind_text(statement, 2, book.getISBN().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK &&
+            sqlite3_bind_text(statement, 3, book.getTitle().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK &&
+            sqlite3_bind_text(statement, 4, book.getauthor().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK &&
+            sqlite3_bind_text(statement, 5, book.getcategory().c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK &&
+            sqlite3_bind_int(statement, 6, book.getpublicationyear()) == SQLITE_OK &&
             sqlite3_bind_text(statement, 7, statustext, -1, SQLITE_TRANSIENT) == SQLITE_OK;
 
-            result = sqlite3_step(statement);
+        if (!bindingsSucceeded)
+        {
+            cerr << "Could not bind book values: "
+                 << sqlite3_errmsg(db) << endl;
+            sqlite3_finalize(statement);
+            return false;
+        }
 
-            if (result != SQLITE_DONE) {
-                cerr << "Could not insert book: "
-                    << sqlite3_errmsg(db) << endl;
+        result = sqlite3_step(statement);
+
+        if (result != SQLITE_DONE)
+        {
+            cerr << "Could not insert book: "
+                 << sqlite3_errmsg(db) << endl;
+            sqlite3_finalize(statement);
+            return false;
+        }
+
+        sqlite3_finalize(statement);
+
+        cout << "Book saved successfully." << endl;
+        return true;
+    }
+
+    bool selectbooks(vector<Book> &books)
+    {
+        if (db == nullptr)
+        {
+            cerr << "Database is not open." << endl;
+            return false;
+        }
+
+        const char *sql =
+            "SELECT book_id, isbn, title, author, category, publication_year, status "
+            "FROM books;";
+
+        sqlite3_stmt *statement = nullptr;
+
+        int result = sqlite3_prepare_v2(
+            db,
+            sql,
+            -1,
+            &statement,
+            nullptr);
+
+        if (result != SQLITE_OK)
+        {
+            cerr << "Could not prepare book select: "
+                 << sqlite3_errmsg(db) << endl;
+            return false;
+        }
+
+        books.clear();
+
+        while ((result = sqlite3_step(statement)) == SQLITE_ROW)
+        {
+            auto readText = [statement](int column)
+            {
+                const unsigned char *value = sqlite3_column_text(statement, column);
+                return value != nullptr
+                           ? string(reinterpret_cast<const char *>(value))
+                           : string();
+            };
+
+            string bookID = readText(0);
+            string ISBN = readText(1);
+            string title = readText(2);
+            string author = readText(3);
+            string category = readText(4);
+            int publicationYear = sqlite3_column_int(statement, 5);
+            string statusText = readText(6);
+            bookstatus status;
+
+            if (statusText == "Available")
+            {
+                status = bookstatus::Available;
+            }
+            else if (statusText == "Issued")
+            {
+                status = bookstatus::Issued;
+            }
+            else
+            {
+                cerr << "Unknown book status in database: "
+                     << statusText << endl;
                 sqlite3_finalize(statement);
+                books.clear();
                 return false;
             }
 
-            sqlite3_finalize(statement);
-
-            cout << "Book saved successfully." << endl;
-            return true;
+            books.emplace_back(
+                bookID,
+                ISBN,
+                title,
+                author,
+                category,
+                publicationYear,
+                status);
         }
 
+        if (result != SQLITE_DONE)
+        {
+            cerr << "Could not read books: "
+                 << sqlite3_errmsg(db) << endl;
+            sqlite3_finalize(statement);
+            return false;
+        }
+
+        sqlite3_finalize(statement);
+        return true;
+    }
 };
 
-// int main() {
-
-//     return 0;
-// }
-
-int main() {
+int main()
+{
     Database database;
 
-    if (!database.open("slims.db")) {
+    if (!database.open("slims.db"))
+    {
         return 1;
     }
 
-    if (!database.enableForeignKeys()) {
+    if (!database.createTables())
+    {
         return 1;
     }
 
-    if (!database.createTables()) {
+    Library library;
+    vector<Book> books;
+    if(!database.selectbooks(books)){
+        cerr << "Could not load books from the database." << endl;
         return 1;
     }
 
-    Book sampleBook(
-        "B001",
-        "9780000000001",
-        "Learning SQLite",
-        "A. Writer",
-        "Computing",
-        2024,
-        bookstatus::Available
-    );
-
-    if (!database.insertbook(sampleBook)) {
-        return 1;
+    for(const Book& book : books){
+        library.addbook(book);
     }
 
-    cout << "Database setup and sample book insert are complete."
-         << endl;
-
+    int choice = 0;
+    Bookmanagement();
+    cout << "Enter the user's choice : ";
+    cin >> choice;
+    switch (choice){
+        case 1:
+            cout << "The User has chosen to add a book";
+            
+    }
 
     return 0;
 }

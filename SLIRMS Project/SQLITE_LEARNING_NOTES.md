@@ -78,3 +78,33 @@ VALUES (?, ?, ?, ?, ?, ?, ?);
 6. Return from `main`; the `Database` destructor closes the connection.
 
 The database file is created in the program's current working directory. Creating the schema makes empty tables; it does not populate them by itself.
+
+## How `Database::insertbook` works
+
+1. It first checks `db`. If the database has not been opened, it prints an error and returns `false` without preparing SQL.
+2. It stores an `INSERT INTO books` statement in `sql`. The column list fixes the order of the seven values, and each `?` is a placeholder to be filled later.
+3. It declares `sqlite3_stmt* statement = nullptr`. `sqlite3_prepare_v2` parses the SQL for this database connection and, on success, puts the prepared statement handle in `statement`. The `-1` length means SQLite should read the SQL through its terminating NUL character.
+4. If preparation fails, the function reports `sqlite3_errmsg(db)` and returns `false`. No statement was successfully prepared for execution.
+5. It translates the C++ `bookstatus` enum to the text SQLite will store: `Available` or `Issued`.
+6. It binds the `Book` properties to the placeholders in matching order: book ID (1), ISBN (2), title (3), author (4), category (5), publication year (6), and status (7). Text values use `sqlite3_bind_text`; the year uses `sqlite3_bind_int`. `SQLITE_TRANSIENT` asks SQLite to copy each text value, so SQLite does not depend on the lifetime of the C++ string buffer.
+7. It calls `sqlite3_step(statement)` to run the insert. `SQLITE_DONE` means the row was inserted; a different result means the insert failed, for example because `book_id` already exists.
+8. It calls `sqlite3_finalize(statement)` to release the prepared statement on the success and insert-failure paths. The `Database` destructor separately closes the connection.
+9. It prints a success message and returns `true` only after `sqlite3_step` returns `SQLITE_DONE`.
+
+### Binding check
+
+`insertbook` stores the combined results of its `sqlite3_bind_*` calls in `bindingsSucceeded` and checks the value before calling `sqlite3_step`. If any binding fails, it reports the SQLite error, finalizes `statement`, and returns `false` without attempting the insert.
+
+The function writes to the SQLite `books` table only. It does not add the `Book` to the in-memory `Library::books` vector; that requires a separate call to `Library::addbook` if both copies are needed.
+
+## Selecting all books from SQLite
+
+`Database::selectbooks(vector<Book>& books)` reads every row from the `books` table and places the results in the supplied vector.
+
+- It first checks that the database connection is open, then prepares a `SELECT` statement naming the seven columns needed to rebuild a `Book`.
+- `sqlite3_step(statement)` returns `SQLITE_ROW` for each row. The function reads text columns with `sqlite3_column_text` and the publication year with `sqlite3_column_int`.
+- The `SELECT` column order determines the zero-based column indexes: book ID 0, ISBN 1, title 2, author 3, category 4, publication year 5, and status 6.
+- `sqlite3_column_text` returns a pointer to SQLite-owned text. The function copies it into a C++ `string` before calling `sqlite3_step` again, because SQLite may invalidate the pointer when it advances to another row.
+- The stored status text is converted back to the C++ `bookstatus` enum. The function accepts `Available` and `Issued`; an unexpected value is reported as an error rather than silently treated as `Issued`. `books.emplace_back(...)` constructs a `Book` from a valid row and appends it to the vector.
+- When no more rows remain, `sqlite3_step` returns `SQLITE_DONE`. Any other result is reported as a read failure. The prepared statement is finalized on both the read-error and successful paths.
+- The function clears the supplied vector after successfully preparing the query, so each call replaces its contents with the current database rows instead of appending duplicates.
